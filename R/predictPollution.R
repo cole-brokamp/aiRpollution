@@ -7,9 +7,10 @@
 #' @param progress.bar logical, show a progress bar?
 #' @export
 #' @examples
+#' library(sp)
 #' sample.loc <- data.frame('x'=-84.5371597,'y'=39.1603015)
 #' coordinates(sample.loc) <- c('x','y')
-#' sp::proj4string(sample.loc) <- CRS("+init=epsg:4326")
+#' proj4string(sample.loc) <- CRS("+init=epsg:4326")
 #' predictPollution(loc=sample.loc,element='TRAP',model.type='rf')
 
 predictPollution <- function(loc,element,model.type,progress.bar=TRUE) {

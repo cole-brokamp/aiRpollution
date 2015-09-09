@@ -1,10 +1,20 @@
 Package: aiRpollution
 Type: Package
-Title: What the Package Does (Title Case)
+Title: CCAAPS air pollution exposure predictions
 Version: 0.1
 Date: 2015-09-08
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Authors@R: person("Cole", "Brokamp", , "cole.brokamp@gmail.com", role = c("aut", "cre"))
+Maintainer: Cole Brokamp <cole.brokamp@gmail.com>
+Description: Produce elemental PM concentration predictions for specific locations based on the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS)
+Depends: R (>= 3.1.2)
+Imports:
+		CB,
+		rgdal,
+		rgeos,
+		sp,
+		raster,
+		randomForest,
+		stringr,
+		pbapply
+License: GPL
 LazyData: TRUE

@@ -19,9 +19,10 @@ predictPollution(loc, element, model.type, progress.bar = TRUE)
 This function is an implementation of the elemental PM exposure (random forest and regression) models developed for the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS).  The underlying functions are not available to the user.  Not meant to be a generalizable package, its sole purpose is to generate exposure estimates for the Cincinnati area.
 }
 \examples{
+library(sp)
 sample.loc <- data.frame('x'=-84.5371597,'y'=39.1603015)
 coordinates(sample.loc) <- c('x','y')
-sp::proj4string(sample.loc) <- CRS("+init=epsg:4326")
+proj4string(sample.loc) <- CRS("+init=epsg:4326")
 predictPollution(loc=sample.loc,element='TRAP',model.type='rf')
 }
 

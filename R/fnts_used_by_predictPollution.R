@@ -52,7 +52,22 @@ predictorToFunctionCall <- function(final.model.predictor.name) {
                     `PM10.PRI:count_` = list(nei_count,'PM10'),
                     `PM10.PRI:emissions.total_` = list(nei_emissions_total,'PM10'),
                     `PM10.PRI:emissions.mean_` = list(nei_emissions_mean,'PM10'),
-                    `PM10.PRI:emissions.dist_` = list(nei_emissions_dist,'PM10'))
+                    `PM10.PRI:emissions.dist_` = list(nei_emissions_dist,'PM10'),
+                    `Nickel.Compounds:dist` = list(nei_dist,'Ni'),
+                    `Nickel.Compounds:count_` = list(nei_count,'Ni'),
+                    `Nickel.Compounds:emissions.total_` = list(nei_emissions_total,'Ni'),
+                    `Nickel.Compounds:emissions.mean_` = list(nei_emissions_mean,'Ni'),
+                    `Nickel.Compounds:emissions.dist_` = list(nei_emissions_dist,'Ni'),
+                    `Lead.Compounds:dist` = list(nei_dist,'Pb'),
+                    `Lead.Compounds:count_` = list(nei_count,'Pb'),
+                    `Lead.Compounds:emissions.total_` = list(nei_emissions_total,'Pb'),
+                    `Lead.Compounds:emissions.mean_` = list(nei_emissions_mean,'Pb'),
+                    `Lead.Compounds:emissions.dist_` = list(nei_emissions_dist,'Pb'),
+                    `Manganese.Compounds:dist` = list(nei_dist,'Mn'),
+                    `Manganese.Compounds:count_` = list(nei_count,'Mn'),
+                    `Manganese.Compounds:emissions.total_` = list(nei_emissions_total,'Mn'),
+                    `Manganese.Compounds:emissions.mean_` = list(nei_emissions_mean,'Mn'),
+                    `Manganese.Compounds:emissions.dist_` = list(nei_emissions_dist,'Mn'))
   if (is.list(fnt_arg)) return(list('fnt'=fnt_arg[[1]],'arg'=fnt_arg[[2]]))
   if (! is.list(fnt_arg)) return(list('fnt'=fnt_arg,'arg'=NULL))
 }

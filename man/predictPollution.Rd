@@ -16,7 +16,7 @@ predictPollution(loc, element, model.type, prog.bar = TRUE)
 \item{prog.bar}{logical, show a progress bar?}
 }
 \description{
-This function is an implementation of the elemental PM exposure (random forest and regression) models developed for the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS).  The underlying functions are not available to the user.  Not meant to be a generalizable package, its sole purpose is to generate exposure estimates for the Cincinnati area.
+This function is an implementation of the elemental PM exposure (random forest and regression) models developed for the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS).  The underlying functions are not available to the user.  Not meant to be a generalizable package, its sole purpose is to generate exposure estimates for the Cincinnati area. It will return NA if any of the necessary predictors are not available for the location.
 }
 \examples{
 library(sp)

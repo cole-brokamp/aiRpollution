@@ -1,6 +1,6 @@
 #' predict pollution exposure
 #'
-#' This function is an implementation of the elemental PM exposure (random forest and regression) models developed for the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS).  The underlying functions are not available to the user.  Not meant to be a generalizable package, its sole purpose is to generate exposure estimates for the Cincinnati area.
+#' This function is an implementation of the elemental PM exposure (random forest and regression) models developed for the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS).  The underlying functions are not available to the user.  Not meant to be a generalizable package, its sole purpose is to generate exposure estimates for the Cincinnati area. It will return NA if any of the necessary predictors are not available for the location.
 #' @param loc the location for which to estimate the concentration (must be a spatial object and have a valid proj4string)
 #' @param element element for which to predict the concentration (one of "Cu", "Fe", "Zn", "S", "Ni", "V", "Si", "K", "Pb", "Mn", "Al", "TRAP", "PM25")
 #' @param model.type either "rf" for random forest or "lm" for regression
@@ -24,8 +24,11 @@ predictPollution <- function(loc,element,model.type,prog.bar=TRUE) {
                                    lm = names(coef(final.model))[-1])
   new.pred.data <- all_lu_data_gen(loc=loc,final.model.predictor.names=final.model.predictors,
                                    prog.bar=prog.bar)
-  out <- predict(final.model,newdata=new.pred.data)
-  out <- exp(out)
+  if (complete.cases(new.pred.data)) {
+    out <- predict(final.model,newdata=new.pred.data)
+    out <- exp(out)
+  }
+  if (! complete.cases(new.pred.data)) out <- NA
   names(out) <- element
   return(out)
 }

@@ -102,9 +102,9 @@ lu_data_gen <- function(loc=sample.locs,final.model.predictor.name) {
 
 # lu_data_gen(final.model.predictor.name='developed.high_1000')
 
-all_lu_data_gen <- function(loc,final.model.predictor.names,progress.bar=TRUE) {
-  if(progress.bar) out <- pbapply::pbsapply(final.model.predictor.names,lu_data_gen,loc=loc)
-  if(!progress.bar) out <- sapply(final.model.predictor.names,lu_data_gen,loc=loc)
+all_lu_data_gen <- function(loc,final.model.predictor.names,prog.bar=FALSE) {
+  if(prog.bar) out <- pbapply::pbsapply(final.model.predictor.names,lu_data_gen,loc=loc)
+  if(!prog.bar) out <- sapply(final.model.predictor.names,lu_data_gen,loc=loc)
   names(out) <- final.model.predictor.names
   return(data.frame(out,check.names=FALSE))
 }

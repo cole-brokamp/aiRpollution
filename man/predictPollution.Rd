@@ -4,7 +4,7 @@
 \alias{predictPollution}
 \title{predict pollution exposure}
 \usage{
-predictPollution(loc, element, model.type, progress.bar = TRUE)
+predictPollution(loc, element, model.type, prog.bar = TRUE)
 }
 \arguments{
 \item{loc}{the location for which to estimate the concentration (must be a spatial object and have a valid proj4string)}
@@ -13,7 +13,7 @@ predictPollution(loc, element, model.type, progress.bar = TRUE)
 
 \item{model.type}{either "rf" for random forest or "lm" for regression}
 
-\item{progress.bar}{logical, show a progress bar?}
+\item{prog.bar}{logical, show a progress bar?}
 }
 \description{
 This function is an implementation of the elemental PM exposure (random forest and regression) models developed for the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS).  The underlying functions are not available to the user.  Not meant to be a generalizable package, its sole purpose is to generate exposure estimates for the Cincinnati area.

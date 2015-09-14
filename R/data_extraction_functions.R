@@ -1,4 +1,14 @@
 
+#' Distance to closest
+#'
+#' Function which calculates the distance to a closest spatial object. Anything that works with rgeos::gDistance will work in this function. loc will be reprojected to the projection of the lines.shapefile and the units will be of that projection.
+#' @param loc spatial object (with valid proj4string)
+#' @param lines.shapefile spatial object for which to calculate minimum distance
+#'
+#' @return data.frame with distance; named based on lines.shapefile input
+#' @export
+#'
+
 distanceToClosest <- function(loc,lines.shapefile) {
   loc <- sp::spTransform(loc,CRS(proj4string(lines.shapefile)))
   dist.to <- rgeos::gDistance(loc,lines.shapefile)
@@ -7,6 +17,15 @@ distanceToClosest <- function(loc,lines.shapefile) {
   return(out)
 }
 
+#' Calculate greenspace
+#'
+#' Uses the greenspace raster (ndvi2000_3735.tif) to extract average greenspace values
+#' @param loc spatial object (with valid proj4string)
+#' @param buffer.radius (radius of circle in which to calculate average NDVI)
+#'
+#' @return data.frame with value; named greenspace_buffer.radius
+#' @export
+#'
 greenspace_static <- function(loc,buffer.radius=400) {
   # assumes greenspace.raster is avail and projected correctly
   suppressPackageStartupMessages(library(rgdal))
@@ -88,7 +107,7 @@ LandCover <- function(loc,buffer.radius=400) {
   names(out) <- paste0(land.cover.table$landcover,'_',buffer.radius)
   return(out)
 }
-  
+
 # LandCover(ccaaps_locations[2, ])
 
 interstateTruckTraffic <- function(loc,buffer.radius=400) {
@@ -126,7 +145,7 @@ highwayTruckTraffic <- function(loc,buffer.radius=400) {
 }
 
 intersection_count <- function(loc,buffer.radius=1000) {
-  loc <- sp::spTransform(loc,CRS(proj4string(d.intersections))) 
+  loc <- sp::spTransform(loc,CRS(proj4string(d.intersections)))
   buffer <- rgeos::gBuffer(loc,width=buffer.radius/0.3048006096,quadsegs=1000)
   crop.buffer <- rgeos::gIntersection(buffer,d.intersections,byid=FALSE)
   if (is.null(crop.buffer)) out <- 0
@@ -174,7 +193,7 @@ linesLength_noDoubles <- function(lat,lon,lines.shapefile,buffer.radius=100) {
                                       function(x,y) crop.buffer.distance.matrix[x,y])
       return(crop.buffer.distances)
     })
-    
+
     # take all lengths which differ by no more than 1e-6 feet
     crop.buffer.lengths <- unlist(crop.buffer.lengths)
     crop.buffer.lengths.unique <- unique(round(crop.buffer.lengths,6))
@@ -188,6 +207,15 @@ linesLength_noDoubles <- function(lat,lon,lines.shapefile,buffer.radius=100) {
 
 ## census info
 
+#' Extract the deprivation index
+#'
+#' Deprivation index derived from PC analysis of 8 different SES Census Tract variables from the 2010 ACS.
+#' @param loc loc spatial object (with valid proj4string)
+#' @param buffer.radius if set to 0, returns the dep index of the containing census tract, if set to > 0, returns the mean dep index for the census tracts that are at least partially contained in the buffer circle
+#'
+#' @return data.frame, named dep.index or dep.index_buffer.radius
+#' @export
+#'
 depIndex <- function(loc,buffer.radius=0) {
   loc <- sp::spTransform(loc,CRS(proj4string(deprivation.shapes)))
   if (buffer.radius == 0) {
@@ -229,7 +257,7 @@ population <-  function(loc,buffer.radius=0) {
 nei_count <- function(loc,buffer.radius=10000,element='PM25') {
   element.name <- grep(element,names(d.NEI@data),value=TRUE)
   d.NEI.subset <- d.NEI[!is.na(d.NEI@data[ ,element.name]), ]
-  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset))) 
+  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset)))
   buffer <- rgeos::gBuffer(loc,width=buffer.radius/0.3048006096,quadsegs=1000)
   crop.buffer <- rgeos::gIntersection(buffer,d.NEI.subset,byid=FALSE)
   if (is.null(crop.buffer)) out <- 0
@@ -243,7 +271,7 @@ nei_count <- function(loc,buffer.radius=10000,element='PM25') {
 nei_dist <- function(loc,element='PM25') {
   element.name <- grep(element,names(d.NEI@data),value=TRUE)
   d.NEI.subset <- d.NEI[!is.na(d.NEI@data[ ,element.name]), ]
-  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset))) 
+  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset)))
   dist <- rgeos::gDistance(loc,d.NEI.subset,byid=FALSE)
   out <- data.frame('NEI.dist'=dist * 0.3048006096)
   return(out)
@@ -254,7 +282,7 @@ nei_dist <- function(loc,element='PM25') {
 nei_emissions_total <- function(loc,buffer.radius=100000,element='PM25') {
   element.name <- grep(element,names(d.NEI@data),value=TRUE)
   d.NEI.subset <- d.NEI[!is.na(d.NEI@data[ ,element.name]), ]
-  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset))) 
+  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset)))
   buffer <- rgeos::gBuffer(loc,width=buffer.radius/0.3048006096,quadsegs=1000)
   intersects.flag <- as.vector(rgeos::gIntersects(buffer,d.NEI.subset,byid=c(FALSE,TRUE)))
   crop.buffer <- d.NEI.subset[intersects.flag, ]
@@ -272,7 +300,7 @@ nei_emissions_total <- function(loc,buffer.radius=100000,element='PM25') {
 nei_emissions_mean <- function(loc,buffer.radius=100000,element='PM25') {
   element.name <- grep(element,names(d.NEI@data),value=TRUE)
   d.NEI.subset <- d.NEI[!is.na(d.NEI@data[ ,element.name]), ]
-  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset))) 
+  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset)))
   buffer <- rgeos::gBuffer(loc,width=buffer.radius/0.3048006096,quadsegs=1000)
   intersects.flag <- as.vector(rgeos::gIntersects(buffer,d.NEI.subset,byid=c(FALSE,TRUE)))
   crop.buffer <- d.NEI.subset[intersects.flag, ]
@@ -290,7 +318,7 @@ nei_emissions_mean <- function(loc,buffer.radius=100000,element='PM25') {
 nei_emissions_dist <- function(loc,buffer.radius=100000,element='PM25') {
   element.name <- grep(element,names(d.NEI@data),value=TRUE)
   d.NEI.subset <- d.NEI[!is.na(d.NEI@data[ ,element.name]), ]
-  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset))) 
+  loc <- sp::spTransform(loc,CRS(proj4string(d.NEI.subset)))
   buffer <- rgeos::gBuffer(loc,width=buffer.radius/0.3048006096,quadsegs=1000)
   crop.buffer <- rgeos::gIntersection(buffer,d.NEI.subset,byid=FALSE)
   if (is.null(crop.buffer)) out <- 0

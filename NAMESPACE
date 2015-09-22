@@ -3,4 +3,5 @@
 export(depIndex)
 export(distanceToClosest)
 export(greenspace_static)
+export(linesLength)
 export(predictPollution)

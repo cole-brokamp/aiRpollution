@@ -12,7 +12,7 @@ distanceToClosest(loc, lines.shapefile)
 \item{lines.shapefile}{spatial object for which to calculate minimum distance}
 }
 \value{
-data.frame with distance; named based on lines.shapefile input
+data.frame with distance; named based on lines.shapefile input (units are assumed to be meters; if feet back transform output by 0.3048006096 m/ft)
 }
 \description{
 Function which calculates the distance to a closest spatial object. Anything that works with rgeos::gDistance will work in this function. loc will be reprojected to the projection of the lines.shapefile and the units will be of that projection.

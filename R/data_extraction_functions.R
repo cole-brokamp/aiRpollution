@@ -159,6 +159,15 @@ intersection_count <- function(loc,buffer.radius=1000) {
 # intersection_count(ccaaps_locations[1, ],buffer.radius=200)
 
 ## length of lines
+
+#' calculate the length of lines within a buffer radius
+#'
+#' @param loc sp object with coordinates and valid proj4string
+#' @param lines.shapefile shapefile of lines to use in calculation
+#' @param buffer.radius buffer radius in meters (assumes that lines.shapefile is projected to unit of feet)
+#'
+#' @return data.frame named based on buffer radius and lines shapefile
+#' @export
 linesLength <- function(loc,lines.shapefile,buffer.radius=100) {
   suppressPackageStartupMessages(library(rgdal))
   loc <- sp::spTransform(loc,CRS(proj4string(lines.shapefile))) # set location to projection of lines.shapefile

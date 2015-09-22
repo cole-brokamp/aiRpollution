@@ -5,7 +5,7 @@
 #' @param loc spatial object (with valid proj4string)
 #' @param lines.shapefile spatial object for which to calculate minimum distance
 #'
-#' @return data.frame with distance; named based on lines.shapefile input
+#' @return data.frame with distance; named based on lines.shapefile input (units are assumed to be meters; if feet back transform output by 0.3048006096 m/ft)
 #' @export
 #'
 
@@ -30,10 +30,11 @@ greenspace_static <- function(loc,buffer.radius=400) {
   # assumes greenspace.raster is avail and projected correctly
   suppressPackageStartupMessages(library(rgdal))
   loc <- sp::spTransform(loc,CRS(proj4string(greenspace.raster)))
-  greenspace <- data.frame(extract(greenspace.raster,loc,buffer=buffer.radius,fun=mean)[[1]])
+  greenspace <- data.frame(extract(greenspace.raster,loc,buffer=buffer.radius/0.3048006096,fun=mean)[[1]])
   names(greenspace) <- paste0('greenspace_',buffer.radius)
   return(greenspace)
 }
+
 
 # greenspace_static(ccaaps_locations[2, ])
 
@@ -47,7 +48,7 @@ elevation_static <- function(loc,buffer.radius=0) {
     return(elevation)
   }
   if (buffer.radius > 0) {
-    elevation <- data.frame(extract(elevation.raster,loc,buffer=buffer.radius,fun=mean)[[1]])
+    elevation <- data.frame(extract(elevation.raster,loc,buffer=buffer.radius/0.3048006096,fun=mean)[[1]])
     names(elevation) <- paste0('elevation_',buffer.radius)
     return(elevation)
   }
@@ -60,7 +61,7 @@ elevation_sd <- function(loc,buffer.radius=100) {
   # assumes elevation.raster is avail and projected correctly
   suppressPackageStartupMessages(library(rgdal))
   loc <- sp::spTransform(loc,CRS(proj4string(elevation.raster)))
-  elevation <- data.frame(extract(elevation.raster,loc,buffer=buffer.radius,fun=sd)[[1]])
+  elevation <- data.frame(extract(elevation.raster,loc,buffer=buffer.radius/0.3048006096,fun=sd)[[1]])
   names(elevation) <- paste0('elevation.sd_',buffer.radius)
   return(elevation)
 }
@@ -72,7 +73,7 @@ elevation_uphill <- function(loc,buffer.radius=100) {
   suppressPackageStartupMessages(library(rgdal))
   loc <- sp::spTransform(loc,CRS(proj4string(elevation.raster)))
   loc.elevation <- extract(elevation.raster,loc)[[1]]
-  elevations <- na.omit(extract(elevation.raster,loc,buffer=buffer.radius)[[1]])
+  elevations <- na.omit(extract(elevation.raster,loc,buffer=buffer.radius/0.3048006096)[[1]])
   uphill.frac <- data.frame(sum(elevations > loc.elevation + 20) / length(elevations))
   names(uphill.frac) <- paste0('elevation.uphill_',buffer.radius)
   return(uphill.frac)
@@ -85,7 +86,7 @@ elevation_downhill <- function(loc,buffer.radius=100) {
   suppressPackageStartupMessages(library(rgdal))
   loc <- sp::spTransform(loc,CRS(proj4string(elevation.raster)))
   loc.elevation <- extract(elevation.raster,loc)[[1]]
-  elevations <- na.omit(extract(elevation.raster,loc,buffer=buffer.radius)[[1]])
+  elevations <- na.omit(extract(elevation.raster,loc,buffer=buffer.radius/0.3048006096)[[1]])
   downhill.frac <- data.frame(sum(elevations < loc.elevation - 20) / length(elevations))
   names(downhill.frac) <- paste0('elevation.downhill_',buffer.radius)
   return(downhill.frac)
@@ -97,6 +98,7 @@ elevation_downhill <- function(loc,buffer.radius=100) {
 LandCover <- function(loc,buffer.radius=400) {
   suppressPackageStartupMessages(library(rgdal))
   loc <- sp::spTransform(loc,CRS(proj4string(landcover.raster)))
+  # landcover raster is projected in meters
   landcover <- extract(landcover.raster,loc,buffer=buffer.radius)[[1]]
   landcover <- factor(landcover,levels=landcover.raster@data@attributes[[1]]$BinValues)
   levels(landcover) <- landcover.raster@data@attributes[[1]]$Value

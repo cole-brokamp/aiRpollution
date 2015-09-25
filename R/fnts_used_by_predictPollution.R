@@ -74,6 +74,7 @@ predictorToFunctionCall <- function(final.model.predictor.name) {
 }
 
 # predictorToFunctionCall('`PM25.PRI:dist`')
+# predictorToFunctionCall('developed.high_1000')
 
 predictorToBufferRadii <- function(final.model.predictor.name) {
   br <- stringr::str_extract(final.model.predictor.name,"[0-9]{3,5}")
@@ -81,6 +82,7 @@ predictorToBufferRadii <- function(final.model.predictor.name) {
 }
 
 # predictorToBufferRadii('`PM25.PRI:dist`')
+# predictorToBufferRadii('developed.high_1000')
 
 lu_data_gen <- function(loc=sample.locs,final.model.predictor.name) {
   nm <- final.model.predictor.name
@@ -103,6 +105,7 @@ lu_data_gen <- function(loc=sample.locs,final.model.predictor.name) {
 }
 
 # lu_data_gen(loc=sample.loc,final.model.predictor.name='`PM25.PRI:dist`')
+# lu_data_gen(loc=sample.loc,final.model.predictor.name='developed.high_1000')
 
 all_lu_data_gen <- function(loc,final.model.predictor.names,prog.bar=FALSE) {
   if(prog.bar) out <- pbapply::pbsapply(final.model.predictor.names,lu_data_gen,loc=loc)
@@ -111,5 +114,5 @@ all_lu_data_gen <- function(loc,final.model.predictor.names,prog.bar=FALSE) {
   return(data.frame(out,check.names=FALSE))
 }
 
-# all_lu_data_gen(loc=sample.loc,final.model.predictor.names='`PM25.PRI:dist`')
+# all_lu_data_gen(loc=sample.loc,final.model.predictor.names=c('`PM25.PRI:dist`','developed.high_1000'))
 

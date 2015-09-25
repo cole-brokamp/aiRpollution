@@ -9,6 +9,7 @@
 # load('/Users/cole/Documents/Biostatistics/Elemental Land Use Models/final_models/LU_data_old_ECAT.RData')
 # load('/Users/cole/Documents/Biostatistics/Elemental Land Use Models/final_models/TIGER_2002.RData')
 #
+# library(raster)
 # elevation.raster <- readAll(elevation.raster)
 # landcover.raster <- readAll(landcover.raster)
 #
@@ -18,7 +19,7 @@
 # greenspace.raster <- readAll(greenspace.raster)
 #
 #
-# #
+# # make sysdata
 # devtools::use_data(bus_lines,d.intersections,d.NEI,deprivation.shapes,elevation.raster,
 #                    greenspace.raster,highway.traffic,interstate.traffic,landcover.raster,
 #                    LU.final.lm.models,LU.final.rf.models,population.shapes,railroads,

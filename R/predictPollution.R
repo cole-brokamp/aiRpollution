@@ -12,6 +12,7 @@
 #' coordinates(sample.loc) <- c('x','y')
 #' proj4string(sample.loc) <- CRS("+init=epsg:4326")
 #' predictPollution(loc=sample.loc,element='TRAP',model.type='rf')
+#' predictPollution(loc=sample.loc,element='Cu',model.type='lm')
 
 predictPollution <- function(loc,element,model.type,prog.bar=TRUE) {
   stopifnot(model.type %in% c('rf','lm'))
@@ -24,6 +25,7 @@ predictPollution <- function(loc,element,model.type,prog.bar=TRUE) {
                                    lm = names(coef(final.model))[-1])
   new.pred.data <- all_lu_data_gen(loc=loc,final.model.predictor.names=final.model.predictors,
                                    prog.bar=prog.bar)
+  names(new.pred.data) <- sapply(names(new.pred.data),function(x) gsub('`','',x))
   if (complete.cases(new.pred.data)) {
     out <- predict(final.model,newdata=new.pred.data)
     out <- exp(out)

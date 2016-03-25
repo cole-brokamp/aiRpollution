@@ -8,4 +8,6 @@ After installation, the package will not work without the system data file.
 Contact me (cole dot brokamp at gmail dot com) if you would like access to the system data file.
 
 Note: This package does not censor the predictions at any upper limit. It may be useful to censor some of the linear model predictions 
-at 10 times the observed maximum.
+at 3 times the observed maximum.
+
+This package is based on work completed for my dissertation. For more details, see: http://colebrokamp.com/dissertation

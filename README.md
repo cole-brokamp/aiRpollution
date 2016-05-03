@@ -1,4 +1,8 @@
 # aiRpollution
+
+
+[![DOI](https://zenodo.org/badge/21831/cole-brokamp/aiRpollution.svg)](https://zenodo.org/badge/latestdoi/21831/cole-brokamp/aiRpollution)
+
 R package for assessing elemental PM exposure in Cincinnati
 
 Install in `R` with `devtools::install_github('cole-brokamp/aiRpollution')`

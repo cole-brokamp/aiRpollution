@@ -3,7 +3,6 @@
 #' This function is an implementation of the elemental PM exposure (random forest and regression) models developed for the Cincinnati Children's Asthma and Air Pollution Study (CCAAPS).  The underlying functions are not available to the user.  Not meant to be a generalizable package, its sole purpose is to generate exposure estimates for the Cincinnati area. It will return NA if any of the necessary predictors are not available for the location.
 #' @param loc the location for which to estimate the concentration (must be a spatial object and have a valid proj4string)
 #' @param element element for which to predict the concentration (one of "Cu", "Fe", "Zn", "S", "Ni", "V", "Si", "K", "Pb", "Mn", "Al", "TRAP", "PM25")
-#' @param model.type either "rf" for random forest or "lm" for regression
 #' @param prog.bar logical, show a progress bar?
 #' @export
 #' @examples
@@ -11,20 +10,13 @@
 #' sample.loc <- data.frame('x'=-84.5371597,'y'=39.1603015)
 #' coordinates(sample.loc) <- c('x','y')
 #' proj4string(sample.loc) <- CRS("+init=epsg:4326")
-#' predictPollution(loc=sample.loc,element='TRAP',model.type='rf')
-#' predictPollution(loc=sample.loc,element='Cu',model.type='lm')
-
-predictPollution <- function(loc,element,model.type,prog.bar=TRUE) {
-  stopifnot(model.type %in% c('rf','lm'))
-  stopifnot(element %in% names(LU.final.lm.models))
-  final.model <- switch(model.type,
-                        rf = LU.final.rf.models[[element]],
-                        lm = LU.final.lm.models[[element]])
-  final.model.predictors <- switch(model.type,
-                                   rf = row.names(randomForest::importance(final.model)),
-                                   lm = names(coef(final.model))[-1])
+#' predictPollution_LURF(loc=sample.loc,element='TRAP')
+predictPollution_LURF <- function(loc,element) {
+  stopifnot(element %in% d_final_el_models$element)
+  final.model <- d_final_el_models[d_final_el_models$element==element,'LURF'][[1]][[1]]
+  final.model.predictors <- row.names(randomForest::importance(final.model))
   new.pred.data <- all_lu_data_gen(loc=loc,final.model.predictor.names=final.model.predictors,
-                                   prog.bar=prog.bar)
+                                   prog.bar=FALSE)
   names(new.pred.data) <- sapply(names(new.pred.data),function(x) gsub('`','',x))
   if (complete.cases(new.pred.data)) {
     out <- predict(final.model,newdata=new.pred.data)

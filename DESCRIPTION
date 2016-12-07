@@ -19,6 +19,7 @@ Imports:
     randomForest,
     stringr,
     pbapply
+Remotes: cole-brokamp/CB
 License: GPL
 LazyData: TRUE
 RoxygenNote: 5.0.1
